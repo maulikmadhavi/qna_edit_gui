@@ -49,13 +49,13 @@ class guiclass(tkinter.Frame):
         self._Q = list(df1['Question'])
         self._A = list(df1['Answer'])
         self.len = len(self._Q)
-        # self._c=InferSentClass()
-        # self._message_embed=np.zeros((len(self._Q),4096))
-        # for var in range(len(self._Q)):
-        #    print(var+1)
-        #    x=self._c.run(self._Q[var])[0]
-        #    x=x/np.linalg.norm(x)
-        #    self._message_embed[var]=x
+        self._c = InferSentClass()
+        self._message_embed = np.zeros((len(self._Q), 4096))
+        for var in range(len(self._Q)):
+            print(var + 1)
+            x = self._c.run(self._Q[var])[0]
+            x = x / np.linalg.norm(x)
+            self._message_embed[var] = x
 
     def initialize_user_interface(self):
         """Draw a user interface allowing the user to type
@@ -134,13 +134,13 @@ class guiclass(tkinter.Frame):
             else:
                 self._A += [self.A_entry.get()]
 
-            # x=self._c.run(self._Q[-1])[0]
+            x = self._c.run(self._Q[-1])[0]
             # print(self._Q)
             # print(self._A)
-            # x=x/np.linalg.norm(x)
-            # self._message_embed.append(x)
-            #self._message_embed=np.concatenate((self._message_embed, [x]))
-           # print(self._message_embed.shape)
+            x = x / np.linalg.norm(x)
+            self._message_embed.append(x)
+            elf._message_embed = np.concatenate((self._message_embed, [x]))
+            print(self._message_embed.shape)
             df = pd.DataFrame({'question': self._Q, 'Answer': self._A})
             df.to_excel('test.xlsx', sheet_name='sheet1', index=False)
 
@@ -198,14 +198,12 @@ class guiclass(tkinter.Frame):
         print("comparing now : " + self.Q_entry.get())
         tic()
         # Load spreadsheet
-        # x=self._c.run(self.Q_entry.get())[0]
-        # x=x/np.linalg.norm(x)
-        # matching=np.dot(self._message_embed,x)
+        x = self._c.run(self.Q_entry.get())[0]
+        x = x / np.linalg.norm(x)
+        matching = np.dot(self._message_embed, x)
 
-        ind = np. random.randint(low=0, high=self.len, size=1)[0]
-        #ind = np.argmax(matching)
-        # ind1=np.argsort(-1*matching)
-        ind1 = np. random.permutation(self.len)
+        ind = np.argmax(matching)
+        ind1 = np.argsort(-1 * matching)
 
         #print('The matched query is :' + self._Q[ind])
         #print('The matching score is :' + str(matching[ind]))
